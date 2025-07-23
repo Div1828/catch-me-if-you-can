@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import type { MousePosition } from "./GameArea";
 
 
-
 interface Props {
   mouse: MousePosition;
   difficulty: "easy" | "medium" | "hard";
-  onCatch: () => void;
+  onMouseClick: () => void;
+
 }
 
 const settings = {
@@ -15,7 +15,7 @@ const settings = {
   hard: { range: 100, delay: 50 },
 };
 
-const ChaseButton: React.FC<Props> = ({ mouse, difficulty , onCatch}) => {
+const ChaseButton: React.FC<Props> = ({ mouse, difficulty , onMouseClick}) => {
  const [pos, setPos] = useState({ x: 300, y: 300 });
   const [cooldown, setCooldown] = useState(false);
 
@@ -33,7 +33,7 @@ const ChaseButton: React.FC<Props> = ({ mouse, difficulty , onCatch}) => {
           x: Math.random() * (window.innerWidth - 100),
           y: Math.random() * (window.innerHeight - 50),
         });
-        setTimeout(() => setCooldown(false), 400); // time before next move allowed
+        setTimeout(() => setCooldown(false), 400); 
       }, delay);
     }
 
@@ -43,11 +43,21 @@ const ChaseButton: React.FC<Props> = ({ mouse, difficulty , onCatch}) => {
 
   return (
     <button
-      className="absolute rounded-full bg-green-500 w-[60px] h-[60px] text-black font-bold font-Silkscreen shadow transition-all duration-150"
+      className="
+        absolute
+        w-24 h-24
+        rounded-full
+        bg-gradient-to-br from-green-400 via-teal-500 to-blue-600
+        shadow-[0_0_30px_8px_rgba(34,197,94,0.6)]
+        hover:shadow-[0_0_50px_15px_rgba(34,197,94,0.8)]
+        transition-all duration-300 ease-out
+      "
       style={{ left: `${pos.x}px`, top: `${pos.y}px` }}
-      onClick={onCatch}
+      onClick={(e) => {
+        e.stopPropagation(); 
+        onMouseClick();     
+      }}
     >
-      
     </button>
   );
 };

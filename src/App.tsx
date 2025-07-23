@@ -1,7 +1,7 @@
 import React from "react";
 import GameArea from "./components/GameArea";
 import Particles from "./components/Particles";
-import "./App.css"; // Assuming you have a styles.css for global styles
+import "./App.css";
 
 const App: React.FC = () => {
   return (
@@ -12,7 +12,7 @@ const App: React.FC = () => {
           particleColors={['#ffffff', '#ffffff']}
           particleCount={800}
           particleSpread={20}
-          speed={0.08}
+          speed={0.1}
           particleBaseSize={100}
           moveParticlesOnHover={false}
           alphaParticles={false}
