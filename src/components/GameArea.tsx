@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ChaseButton from "./ChaseButton";
 import WinScreen from "./WinScreen";
 import StartScreen from "./StartScreen";
-
+import { addTries } from "../utils/leaderboard.ts";
 import clickSound from "../assets/sounds/click-sound.wav";
 import winSound from "../assets/sounds/win-sound.wav";
 import { roasts } from "../assets/roasts.ts";
@@ -22,6 +22,7 @@ const GameArea: React.FC = () => {
   const [speaking, setSpeaking] = useState(false);
   const [showWin, setShowWin] = useState(false);
   const [playerName, setPlayerName] = useState<string | null>(null);
+  const [name, setName] = useState('');
 
   const speak = (text: string) => {
     const utterance = new SpeechSynthesisUtterance(text);
@@ -71,6 +72,7 @@ const GameArea: React.FC = () => {
     if (tries !== null) {
       new Audio(winSound).play();
       setShowWin(true);
+      addTries(name ?? "Anonymous", tries, difficulty);
     }
   };
 
@@ -91,7 +93,7 @@ const GameArea: React.FC = () => {
       onClick={handleMouseClick}
       onMouseMove={handleMouseMove}
     >
-      {!playerName && <StartScreen onStart={(name) => setPlayerName(name)} />}
+      {!playerName && <StartScreen difficulty={difficulty} name={name} setName={setName} onStart={(name) => setPlayerName(name)} />}
 
       {playerName && (
         <div className="absolute top-4 left-4 z-10 font-Silkscreen text-green-300 text-sm">
