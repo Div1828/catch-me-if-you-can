@@ -10,14 +10,16 @@ interface Props {
 }
 
 const settings = {
-  easy: { range: 150, delay: 300 },
-  medium: { range: 120, delay: 150 },
-  hard: { range: 100, delay: 50 },
+  easy: { range: 200, delay: 200 },
+  medium: { range: 250, delay: 200 },
+  hard: { range: 300, delay: 150 },
 };
 
 const ChaseButton: React.FC<Props> = ({ mouse, difficulty , onMouseClick}) => {
  const [pos, setPos] = useState({ x: 300, y: 300 });
   const [cooldown, setCooldown] = useState(false);
+  
+
 
   const { range, delay } = settings[difficulty];
 
