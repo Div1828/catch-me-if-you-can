@@ -12,6 +12,7 @@ export interface MousePosition {
   y: number;
 }
 
+
 type Difficulty = "easy" | "medium" | "hard";
 
 const GameArea: React.FC = () => {
@@ -19,50 +20,39 @@ const GameArea: React.FC = () => {
   const [mouse, setMouse] = useState<MousePosition>({ x: 0, y: 0 });
   const [difficulty, setDifficulty] = useState<Difficulty>("easy");
   const [currentRoast, setCurrentRoast] = useState<string | null>(null);
-  const [speaking, setSpeaking] = useState(false);
   const [showWin, setShowWin] = useState(false);
   const [playerName, setPlayerName] = useState<string | null>(null);
   const [name, setName] = useState('');
 
-  const speak = (text: string) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.pitch = 1;
-    utterance.rate = 1;
+  
 
-    setSpeaking(true);
-    utterance.onend = () => setSpeaking(false);
+  const playRoast = async (roast: { text: string; audio: string }) => {
+  if (!playerName || showWin) return;
 
-    const setVoiceAndSpeak = () => {
-      const voices = speechSynthesis.getVoices();
-      const preferredVoice = voices.find((v) => v.name.includes("David"));
-      if (preferredVoice) utterance.voice = preferredVoice;
-      speechSynthesis.speak(utterance);
-    };
+  const audio = new Audio(roast.audio);
+  setCurrentRoast(roast.text);
+  audio.play();
+};
 
-    if (speechSynthesis.getVoices().length === 0) {
-      speechSynthesis.addEventListener("voiceschanged", () => setVoiceAndSpeak());
-    } else {
-      setVoiceAndSpeak();
-    }
-  };
 
   const handleMouseClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (speaking || showWin || !playerName) return;
+  const target = e.target as HTMLElement;
+  const blockedTags = ["SELECT", "OPTION", "BUTTON", "LABEL"];
 
-    const target = e.target as HTMLElement;
-    const blockedTags = ["SELECT", "OPTION", "BUTTON", "LABEL"];
-    if (blockedTags.includes(target.tagName)) return;
+  // 🔒 Only allow roast logic if game is active
+  if (!playerName || showWin || blockedTags.includes(target.tagName)) return;
 
-    if (tries !== null) setTries(tries + 1);
+  if (tries !== null) setTries(tries + 1);
 
-    new Audio(clickSound).play();
+  new Audio(clickSound).play();
 
-    const randomRoast = roasts[Math.floor(Math.random() * roasts.length)];
-    setCurrentRoast(randomRoast);
-    speak(randomRoast);
+  const randomRoast = roasts[Math.floor(Math.random() * roasts.length)];
+  setCurrentRoast(randomRoast.text);
+  playRoast(randomRoast);
 
-    setTimeout(() => setCurrentRoast(""), 3000);
-  };
+  setTimeout(() => setCurrentRoast(""), 6000);
+};
+
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     setMouse({ x: e.clientX, y: e.clientY });

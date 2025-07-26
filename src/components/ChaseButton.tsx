@@ -41,13 +41,13 @@ const ChaseButton: React.FC<Props> = ({ mouse, difficulty , onMouseClick}) => {
 
     console.log("Difficulty:", difficulty, "Range:", range, "Delay:", delay);
 
-  }, [mouse, cooldown, delay, range, pos]);
+  }, [mouse, cooldown, delay, range, pos, difficulty]);
 
   return (
     <button
       className="
         absolute
-        w-24 h-24
+        w-22 h-22
         rounded-full
         bg-gradient-to-br from-green-400 via-teal-500 to-blue-600
         shadow-[0_0_30px_8px_rgba(34,197,94,0.6)]
